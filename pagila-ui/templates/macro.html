@@ -1,0 +1,77 @@
+{% macro paginate(pagination) -%}
+<div  id="pagination-modal" 
+      class="modal"
+      _="on keydown[key is 'Escape'] from #body remove .is-active from closest .modal
+         on click from .pagination-opener add .is-active to the closest .modal">
+  <div  class="modal-background"
+        _="on click remove .is-active from closest .modal"></div>
+  <div class="modal-content">
+    <div class="box">
+      <div class="field">
+        <label class="label" for="page-select">Go to page</label>
+        <div class="control">
+          <div class="select">
+          {% with p=pagination.get_rel(0) %}
+            <select hx-get="{{ pagination.base_url }}" 
+                    hx-push-url="true"
+                    hx-target="#body" 
+                    hx-swap="outerHTML show:top"
+                    name="{{ pagination.page_param }}"
+                    id="page-select">
+              {% for n in range(0, pagination.page_count)%}
+              <option value="{{ n + 1 }}" {{ "selected=true" if pagination.current_page_index == n }}>{{ n + 1 }}</option>
+              {% endfor %}    
+            </select>
+          {% endwith %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="modal-close is-large" 
+          aria-label="close"  
+          _="on click remove .is-active from closest .modal"></button>
+</div>
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination" hx-boost="true">
+  {% with p=pagination.get_rel(-1) %}
+  <a href="{{ p.url if p }}" class="pagination-previous {{ "is-disabled" if not p }}">Previous</a>
+  {% endwith %}
+  {% with p=pagination.get_rel(1) %}
+  <a href="{{ p.url if p }}" class="pagination-next {{ "is-disabled" if not p }}">Next page</a>
+  {% endwith %}
+  <ul class="pagination-list">
+    {% with p=pagination.get_rel(-1) %}
+    {% if p %}
+    {% if pagination.current_page_index > 1 %}
+    {% with p=pagination.get_abs(0) %}
+    <li><a href="{{ p.url }}" class="pagination-link" aria-label="Goto page {{ p.page }}">{{ p.page }}</a></li>
+    {% endwith %}
+    {% if pagination.current_page_index > 2 %}
+    <li class="pagination-opener"><span class="pagination-ellipsis">&hellip;</span></li>
+    {% endif %}
+    {% endif %}
+    <li><a href="{{ p.url }}" class="pagination-link" aria-label="Goto page {{ p.page }}">{{ p.page }}</a></li>
+    {% endif %}
+    {% endwith %}
+
+    {% with p=pagination.get_rel(0) %}
+    <li><a href="{{ p.url }}" {% if p.is_current %} class="pagination-link is-current" aria-current="page" {% else %} class="pagination-link" {% endif %} aria-label="Goto page {{ p.page }}">{{ p.page }}</a></li>
+    {% endwith %}
+
+    {% with p=pagination.get_rel(1) %}
+    {% if p %}
+    <li><a href="{{ p.url }}" class="pagination-link" aria-label="Goto page {{ p.page }}">{{ p.page }}</a></li>
+    {% if pagination.current_page_index < pagination.page_count - 2 %}
+    {% if pagination.current_page_index < pagination.page_count - 3 %}
+    <li class="pagination-opener"><span class="pagination-ellipsis">&hellip;</span></li>
+    {% endif %}
+    {% with p=pagination.get_abs(-1) %}
+    <li><a href="{{ p.url }}" class="pagination-link" aria-label="Goto page {{ p.page }}">{{ p.page }}</a></li>
+    {% endwith %}
+    {% endif %}
+    {% endif %}
+    {% endwith %}
+  </ul>
+</nav>
+{%- endmacro %}

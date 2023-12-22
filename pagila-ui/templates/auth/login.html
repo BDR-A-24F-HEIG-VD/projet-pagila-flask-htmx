@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="p-6">
+        <form method="post">
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <input class="input" type="email" name="email" id="email" required>
+            </div>
+            <div class="control">
+                <input class="button is-primary" type="submit" value="Log In"></input>
+            </div>
+        </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pagila UI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bulma@0.9.4.min.css.gz') }}">
+    <script src="{{ url_for('static', filename='vendor/htmx@1.9.9.min.js.gz') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/hyperscript@0.9.12.min.js.gz') }}"></script>
+  </head>
+  <body id="body">
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">
+          Pagila UI
+        </a>
+    
+        <a role="button" 
+           class="navbar-burger" 
+           aria-label="menu" 
+           aria-expanded="false" 
+           data-target="navbarBasicExample"
+           _="on click 
+                toggle .is-active on #{my.dataset.target}
+                toggle .is-active">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+    
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+          {% if g.customer %}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <span>Hello {{ g.customer.first_name }} {{ g.customer.last_name }}</span>
+            </a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="{{ url_for('auth.logout') }}">
+                Log out
+              </a>
+            </div>
+          </div>
+          {% else %}
+          <div class="navbar-item">
+            <div class="buttons">
+              <a href="{{ url_for('auth.login') }}" class="button is-light">
+                Log in
+              </a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <article class="message is-{{category}} flash">
+        <div class="message-body">
+          {{ message }}
+        </div>
+      </article>
+    {% endfor %}
+
+    {% block content %}{% endblock %}  
+    
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          Created as an example project for the BDR course at HEIG-VD.
+        </p>
+        <p>
+          Developped using <a href="https://www.python.org/">Python</a> 
+          + <a href="https://flask.palletsprojects.com/en/3.0.x/">Flask</a> 
+          + <a href="https://htmx.org/">HTMX</a> 
+          + <a href="https://hyperscript.org/">Hyperscript</a>.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

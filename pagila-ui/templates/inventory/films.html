@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="content">
+        <h1 class="title">
+          Films
+        </h1>
+        <p class="subtitle">
+          The film available at the current store!
+        </p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="content">
+      {% for film in films %}
+      {% block film_entry scoped %}
+      <div  class="box" 
+            hx-target="this"
+            hx-swap="outerHTML">
+        <article class="media">
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{{ film.title }}</strong> <small>({{ film.release_year }})</small>
+                <br>
+                {{ film.description }}
+              </p>
+            </div>
+          </div>
+          <div class="media-right">
+               {% if film.rental_id %}
+               <button class="button is-warning"
+                       hx-post="{{ url_for('inventory.return_rental', rental_id=film.rental_id) }}">Return</button>
+               {% else %}
+               {% if g.customer %}
+               <button class="button"
+                       {{ "disabled" if film.nb_copy <= film.nb_rented else ""}}
+                       hx-post="{{ url_for('inventory.rent', store_id=store_id, film_id=film.film_id) }}">Rent</button>
+               {% endif %}
+               {% endif %}
+          </div>
+        </article>
+      </div>
+      {% endblock %}
+      {% endfor %}
+    </div>
+    {% import 'macro.html' as macro %}
+    {{ macro.paginate(pagination) }}
+  </div>
+</section>
+{% endblock %}
