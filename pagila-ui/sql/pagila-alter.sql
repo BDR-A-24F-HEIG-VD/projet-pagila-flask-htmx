@@ -4,5 +4,4 @@ alter table pagila.rental
 
 -- A customer can be uniquely identified by it's email.
 alter table pagila.customer
-         add constraint customer_email
-             unique (email);
+    add constraint customer_email unique (email);

@@ -19,6 +19,7 @@ def login_required(view):
 
     @functools.wraps(view)
     def wrapped_view(**kwargs):
+        # Check if the customer property was set in the application context.
         if g.customer is None:
             return redirect(url_for("auth.login"))
 
@@ -29,7 +30,7 @@ def login_required(view):
 
 @bp.before_app_request
 def load_logged_in_customer():
-    """If a customer id is stored in the session, load the user object from
+    """If a customer id is stored in the session (cookie), load the user object from
     the database into ``g.customer``."""
     customer_id = session.get("customer_id")
 
@@ -37,9 +38,10 @@ def load_logged_in_customer():
         g.customer = None
     else:
         db = get_db()
-        g.customer = (
-            db.execute("SELECT * FROM pagila.customer WHERE customer_id = %s", (customer_id,)).fetchone()
-        )
+        g.customer = db.execute(
+            "SELECT * FROM pagila.customer WHERE customer_id = %(customer_id)s",
+            dict(customer_id=customer_id),
+        ).fetchone()
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -48,10 +50,11 @@ def login():
     if request.method == "POST":
         email = request.form["email"]
 
-        db = get_db() 
+        db = get_db()
         error = None
         customer = db.execute(
-            "SELECT * FROM pagila.customer WHERE email = %s", (email,)
+            "SELECT * FROM pagila.customer WHERE email = %(email)s",
+            dict(email=email),
         ).fetchone()
 
         if customer is None:

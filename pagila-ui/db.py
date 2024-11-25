@@ -13,8 +13,7 @@ def get_db():
     """
     if "db" not in g:
         g.db = psycopg.connect(
-            current_app.config["DATABASE"],
-            row_factory=namedtuple_row
+            current_app.config["DATABASE"], row_factory=namedtuple_row
         )
 
     return g.db
@@ -45,6 +44,7 @@ def init_db():
         with current_app.open_resource(path) as f:
             click.echo(f"Executing script: {path}")
             db.execute(f.read().decode("utf8"))
+
 
 @click.command("init-db")
 def init_db_command():
