@@ -51,6 +51,12 @@ This example is not secured, any one can authenticate without any proof of ident
 poetry install
 ```
 
+> **Remarque** - Sur wsl, il sera peut-être nécessaire d'exécuter les deux commandes suivantes.
+> ```sh
+> sudo apt install python3-psycopg2
+> poetry add psycopg2-binary
+> ```
+
 ### Preparing the database
 
 ```sh
@@ -58,6 +64,12 @@ docker compose up -d
 export PAGILA_DB="postgresql://bdr:bdr@localhost:5432/bdr" 
 flask --app pagila-ui init-db
 ```
+
+> **Remarque** - Si l'exécutable `flask` n'est pas trouvé, préfixez les commandes `flask` par `poetry run`. Par exemple :
+> ```sh
+> petry run flask --app pagila-ui init-db
+> ```
+> et de même pour l'étape suivante.
 
 ### Running the server
 
