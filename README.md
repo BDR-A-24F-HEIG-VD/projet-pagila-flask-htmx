@@ -51,12 +51,6 @@ This example is not secured, any one can authenticate without any proof of ident
 poetry install
 ```
 
-> **Remarque** - Sur wsl, il sera peut-être nécessaire d'exécuter les deux commandes suivantes.
-> ```sh
-> sudo apt install python3-psycopg2
-> poetry add psycopg2-binary
-> ```
-
 ### Preparing the database
 
 ```sh
