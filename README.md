@@ -67,7 +67,7 @@ flask --app pagila-ui init-db
 
 > **Remarque** - Si l'exécutable `flask` n'est pas trouvé, préfixez les commandes `flask` par `poetry run`. Par exemple :
 > ```sh
-> petry run flask --app pagila-ui init-db
+> poetry run flask --app pagila-ui init-db
 > ```
 > et de même pour l'étape suivante.
 
